@@ -12,14 +12,6 @@ server.listen(port, ()=>{
 server.on('error', onError);
 server.on('listening', onListening);
 
-
-//loading burse data from json
-let brockers = require('../data/brockers');
-let burse_settings = require('../data/bursesettings');
-let stocks = require('../data/stocks');
-//end of loading data
-
-
 io.sockets.on('connection', (socket) => {
     socket.on('hello', (msg) => {
         let time = (new Date()).toLocaleTimeString();

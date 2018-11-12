@@ -32,7 +32,7 @@ class App extends Component {
                                            updateData={this.updateData}
                                        />}
                             />
-                            <Route path="/burse"
+                            <Route exact path="/burse/:id"
                                    render={() =>
                                        <Brocker
                                             user={this.state.user}

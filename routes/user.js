@@ -1,18 +1,29 @@
 const express = require('express');
+const path = require('path');
+
 const router = express.Router();
 let nickname = "";
 
-let brockers = require('../data/brockers');
-let brockersArr = [];
-for (let key in brockers) {
-    brockers[key].ind = Number(key);
-    brockersArr.push(brockers[key]);
+function getArrayFromObject(obj) {
+    let arr = [];
+    for (let key in obj) {
+        obj[key].id = Number(key);
+        arr.push(obj[key]);
+    }
+    return arr;
 }
-console.log(brockersArr);
 
+let brockersArr = getArrayFromObject(require('../data/brockers'));
+console.log('brockers:', brockersArr);
+
+let stocksArr = getArrayFromObject(require('../data/stocks'));
+console.log('stocks:', stocksArr);
+
+let burseSettings = require('../data/bursesettings');
+console.log('setts:', burseSettings);
 
 router.get('/', function (req, res) {
-    res.render('userauth');
+    res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 router.get('/:name', function (req, res) {
@@ -22,6 +33,8 @@ router.get('/:name', function (req, res) {
         if (brockersArr[i].name === nickname) {
             res.status(200);
             res.send({
+                status: 200,
+                id: brockersArr[i].id,
                 nickname: nickname,
                 money: brockersArr[i].money
             });
@@ -31,8 +44,20 @@ router.get('/:name', function (req, res) {
     }
     if (!isBurseMember) {
         res.status(400);
-        res.json({message: "Пользователь не зарегистрирован в аукционе!"});
+        res.json({
+            status: 400,
+            message: "Пользователь не зарегистрирован в аукционе!"});
     }
+});
+
+router.get('/settings', function (req, res) {
+    res.status(200);
+    res.send(burseSettings);
+});
+
+router.get('/stocks', function (req, res) {
+    res.status(200);
+    res.send(stocksArr);
 });
 
 module.exports = router;

@@ -7,12 +7,13 @@ class Authorization extends Component {
         super(props);
         this.state = {
             error: null,
-            isAuth: false,
             inputValue: '',
-            toBursePage: false
+            toBursePage: false,
+            userId: null
         };
         this.login = this.login.bind(this);
         this.onTextChange = this.onTextChange.bind(this);
+        this.handleKeyPress = this.handleKeyPress(this);
     }
 
     componentDidMount() {
@@ -20,7 +21,13 @@ class Authorization extends Component {
     }
 
     onTextChange(e) {
-        this.setState({inputValue: e.target.value.trim()});
+        this.setState({inputValue: e.target.value.trim(), error: null});
+    }
+
+    handleKeyPress(e) {
+        if (e.key === 'Enter') {
+            this.login();
+        }
     }
 
     login(e) {
@@ -28,12 +35,18 @@ class Authorization extends Component {
         fetch(`http://localhost:80/${this.state.inputValue}`)
             .then(res => res.json())
             .then(
-                (result) => {
+                (response) => {
+                    if (response.status !== 200) {
+                        this.setState({
+                            error: response.message
+                        });
+                        return;
+                    }
+                    this.props.updateData(response);
                     this.setState({
-                        isAuth: true
+                        toBursePage: true,
+                        userId: response.id
                     });
-                    this.props.updateData(result);
-                    this.setState({toBursePage: true});
                 },
                 (error) => {
                     this.setState({
@@ -48,42 +61,45 @@ class Authorization extends Component {
         const divStyle = {
             width: '500px'
         };
-        const { name, error } = this.props;
-        if (this.state.toBursePage)
-            return <Redirect to='/burse' />;
+        const error = this.state.error;
+        if (this.state.toBursePage) {
+            const ref = `/burse/${this.state.userId}`;
+            return <Redirect to={ref} />;
+        }
         return (
-            <div className="Auth">
-                <div
-                    className='w3-container w3-half w3-display-middle'
-                    style={divStyle}
+<div className="Auth">
+    <div
+        className='w3-container w3-half w3-display-middle'
+        style={divStyle}
+    >
+        <h1>Авторизация</h1>
+        <form className='w3-container w3-card-4'>
+            <p>
+                {error ? <label className='error w3-label w3-validate w3-red'> {error} Попробуйте еще раз.</label> : ''}
+                <input
+                    id='nickname'
+                    className='w3-input'
+                    type='text'
+                    ref='name'
+                    value={this.state.inputValue}
+                    onChange={this.onTextChange}
+                    onKeyPress={this.handleKeyPress}
+                    required
+                />
+                <label className='w3-label w3-validate'>Введите ваше имя</label>
+            </p>
+            <p>
+                <button
+                    onClick={this.login}
+                    className='w3-btn w3-padding w3-teal'
+                    disabled={!this.state.inputValue}
                 >
-                    <h1>Авторизация</h1>
-                    <form className='w3-container w3-card-4'>
-                        <p>
-                            {error ? <label className='error w3-label w3-validate w3-red'> {error}. <br /> Попробуйте еще раз.</label> : ''}
-                            <input
-                                id='nickname'
-                                className='w3-input'
-                                type='text'
-                                ref='name'
-                                value={this.state.inputValue}
-                                onChange={this.onTextChange}
-                                required
-                            />
-                            <label className='w3-label w3-validate'>Введите ваше имя</label>
-                        </p>
-                        <p>
-                            <button
-                                onClick={this.login}
-                                className='w3-btn w3-padding w3-teal'
-                                disabled={!this.state.inputValue}
-                            >
-                                Войти
-                            </button>
-                        </p>
-                    </form>
-                </div>
-            </div>
+                    Войти
+                </button>
+            </p>
+        </form>
+    </div>
+</div>
         );
     }
 }
