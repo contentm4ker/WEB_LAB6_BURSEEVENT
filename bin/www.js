@@ -18,9 +18,11 @@ io.sockets.on('connection', (socket) => {
         socket['name'] = msg.name;
         send(socket, `${msg.name} присоединился`, `${time}`)
     });
-    socket.on('msg', (msg) => {
-        let time = (new Date()).toLocaleTimeString();
-        send(socket, `${socket['name']}: ${msg.value}`, `${time}`);
+    socket.on('subscribeToTimer', (interval) => {
+        console.log('client is subscribing to timer with interval ', interval);
+        setInterval(() => {
+            socket.emit('timer', new Date());
+        }, interval);
     });
     socket.on('disconnect', (msg) => {
         if (socket['name']) {

@@ -1,38 +1,56 @@
 {
   "11": {
-    "name": "Mr. Nice",
-    "money": 10000
+    "name": "Ivan",
+    "money": 10000,
+    "stocks": [
+      {
+        "id": 5,
+        "amount": 5,
+        "price": 9400
+      },
+      {
+        "id": 6,
+        "amount": 5,
+        "price": 8400
+      }
+    ]
   },
   "12": {
-    "name": "Narco",
-    "money": 50000
+    "name": "Misha",
+    "money": 50000,
+    "stocks": [
+      {
+        "id": 6,
+        "amount": 6,
+        "price": 8400
+      }
+    ]
   },
   "13": {
-    "name": "Bombasto",
-    "money": 30000
+    "name": "Grisha",
+    "money": 30000,
+    "stocks": [
+      {
+        "id": 10,
+        "amount": 10,
+        "price": 7000
+      },
+      {
+        "id": 6,
+        "amount": 10,
+        "price": 8400
+      }
+    ]
   },
   "14": {
-    "name": "Celeritas",
-    "money": 16070
-  },
-  "15": {
-    "name": "Magneta",
-    "money": 12345
-  },
-  "16": {
-    "name": "RubberMan",
-    "money": 26200
-  },
-  "18": {
-    "name": "Magma",
-    "money": 10600
-  },
-  "20": {
-    "name": "Никита",
-    "money": 10000
-  },
-  "21": {
-    "name": "Ivan",
-    "money": 12345
+    "name": "Sasha",
+    "money": 16070,
+    "stocks": [
+      {
+        "id": 8,
+        "amount": 8,
+        "price": 6400
+      }
+    ]
   }
 }

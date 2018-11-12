@@ -9,11 +9,12 @@ class Authorization extends Component {
             error: null,
             inputValue: '',
             toBursePage: false,
+            toAdminPage: false,
             userId: null
         };
         this.login = this.login.bind(this);
         this.onTextChange = this.onTextChange.bind(this);
-        this.handleKeyPress = this.handleKeyPress(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     componentDidMount() {
@@ -31,15 +32,19 @@ class Authorization extends Component {
     }
 
     login(e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
+        if (this.state.inputValue === 'admin') {
+            this.setState({toAdminPage: true});
+            return;
+        }
         fetch(`http://localhost:80/${this.state.inputValue}`)
             .then(res => res.json())
             .then(
                 (response) => {
                     if (response.status !== 200) {
-                        this.setState({
-                            error: response.message
-                        });
+                        this.setState({error: response.message});
                         return;
                     }
                     this.props.updateData(response);
@@ -65,6 +70,8 @@ class Authorization extends Component {
         if (this.state.toBursePage) {
             const ref = `/burse/${this.state.userId}`;
             return <Redirect to={ref} />;
+        } else if (this.state.toAdminPage) {
+            return <Redirect to="/admin" />;
         }
         return (
 <div className="Auth">
