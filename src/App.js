@@ -1,27 +1,50 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 import './App.css';
+import NotFound from './components/notfound'
+import Admin from './components/admin'
+import Authorization from './components/auth'
+import Brocker from './components/brocker'
+
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: null
+        };
+        this.updateData = this.updateData.bind(this);
+    }
+
+    updateData(value) {
+        this.setState({ user: value });
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <header className="App-header">
+                    <BrowserRouter>
+                        <Switch>
+                            <Route exact path="/"
+                                   render={() =>
+                                       <Authorization
+                                           updateData={this.updateData}
+                                       />}
+                            />
+                            <Route path="/burse"
+                                   render={() =>
+                                       <Brocker
+                                            user={this.state.user}
+                                       />}
+                            />
+                            <Route exact path="/admin" component={Admin} />
+                            <Route component={NotFound} />
+                        </Switch>
+                    </BrowserRouter>
+                </header>
+            </div>
+        );
   }
 }
 
