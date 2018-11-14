@@ -26,7 +26,7 @@ router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
-router.get('/:name', function (req, res) {
+router.get('/login/:name', function (req, res) {
     nickname = req.params.name;
     let isBurseMember = false;
     for (let i = 0; i < brockersArr.length; i++) {
@@ -50,14 +50,15 @@ router.get('/:name', function (req, res) {
     }
 });
 
-router.get('/settings', function (req, res) {
-    res.status(200);
-    res.send(burseSettings);
-});
 
-router.get('/stocks', function (req, res) {
+router.get('/admin', function (req, res) {
+    console.log("huy");
     res.status(200);
-    res.send(stocksArr);
+    res.send({
+        settings: burseSettings,
+        stocks: stocksArr,
+        brockers: brockersArr
+    });
 });
 
 module.exports = router;

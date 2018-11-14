@@ -39,7 +39,7 @@ class Authorization extends Component {
             this.setState({toAdminPage: true});
             return;
         }
-        fetch(`http://localhost:80/${this.state.inputValue}`)
+        fetch(`http://localhost:80/login/${this.state.inputValue}`)
             .then(res => res.json())
             .then(
                 (response) => {
@@ -55,7 +55,6 @@ class Authorization extends Component {
                 },
                 (error) => {
                     this.setState({
-                        isAuth: false,
                         error
                     });
                 }
