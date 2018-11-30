@@ -13,22 +13,43 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 io.sockets.on('connection', (socket) => {
-    socket.on('hello', (msg) => {
-        let time = (new Date()).toLocaleTimeString();
-        socket['name'] = msg.name;
-        send(socket, `${msg.name} присоединился`, `${time}`)
+    socket.on('hello', (id) => {
+        socket.broadcast.emit('hello', id);
+        console.log(id, "зашел");
     });
+
     socket.on('subscribeToTimer', (interval) => {
         console.log('client is subscribing to timer with interval ', interval);
         setInterval(() => {
             socket.emit('timer', new Date());
         }, interval);
     });
-    socket.on('disconnect', (msg) => {
-        if (socket['name']) {
-            let time = (new Date()).toLocaleTimeString();
-            send(socket, `${socket['name']} вышел`, `${time}`);
-        }
+
+    socket.on('setSellsThings', (data) => {
+        socket.broadcast.emit('setSellsThings', data);
+    });
+
+    socket.on('startSelling', () => {
+        socket.broadcast.emit('startSelling');
+    });
+
+    socket.on('addStocks', (data) => {
+        socket.json.emit('addStocks', data);
+        socket.broadcast.emit('addStocks', data);
+    });
+
+    socket.on('delStocks', (data) => {
+        socket.json.emit('delStocks', data);
+        socket.broadcast.emit('delStocks', data);
+    });
+
+    socket.on('stopSelling', () => {
+        socket.broadcast.emit('stopSelling');
+    });
+
+    socket.on('disct', (id) => {
+        socket.broadcast.emit('disct', id);
+        console.log(id, "вышел");
     });
 });
 

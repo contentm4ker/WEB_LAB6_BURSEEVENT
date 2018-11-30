@@ -52,7 +52,6 @@ router.get('/login/:name', function (req, res) {
 
 
 router.get('/admin', function (req, res) {
-    console.log("huy");
     res.status(200);
     res.send({
         settings: burseSettings,
